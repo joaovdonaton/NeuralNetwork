@@ -11,7 +11,31 @@ Matrix::Matrix(int num_rows, int num_columns, double initial_value) {
 	}
 }
 
-Matrix Matrix::matrix_mult(Matrix mat) {
+Matrix Matrix::matrix_log(char b) {
+	Matrix new_m(this->num_rows, this->num_columns, 1);
+	//temporary fix
+	switch (b) {
+	case 't': //base 10 logarithm
+		for (int i = 0; i < this->num_rows; i++) {
+			for (int j = 0; j < this->num_columns; j++) {
+				new_m.set_value(i, j, log10(this->get_value(i, j)));
+			}
+		}
+		break;
+	case 'n': //natural logarithm
+		for (int i = 0; i < this->num_rows; i++) {
+			for (int j = 0; j < this->num_columns; j++) {
+				new_m.set_value(i, j, log(this->get_value(i, j)));
+			}
+		}
+		break;
+	default:
+		std::cout << "Invalid logarithm base" << std::endl;
+	}
+	return new_m;
+}
+
+Matrix Matrix::matrix_op(Matrix mat, char op) {
 	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
 		std::cout << "Element wise matrix multiplication failed: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
@@ -21,7 +45,18 @@ Matrix Matrix::matrix_mult(Matrix mat) {
 	Matrix new_m(this->num_rows, this->num_columns, 1);
 	for (int i = 0; i < this->num_rows; i++) {
 		for (int j = 0; j < this->num_columns; j++) {
-			new_m.set_value(i, j, this->get_value(i, j)*mat.get_value(i, j));
+			//temporary fix
+			switch (op) {
+			case '*':
+				new_m.set_value(i, j, this->get_value(i, j) * mat.get_value(i, j));
+				break;
+			case '-':
+				new_m.set_value(i, j, this->get_value(i, j) - mat.get_value(i, j));
+				break;
+			default:
+				std::cout << "Invalid element wise operation" << std::endl;
+				return Matrix(1, 1, 1);
+			}
 		}
 	}
 
@@ -115,6 +150,7 @@ Matrix Matrix::matrix_sum(int axis) {
 }
 
 void Matrix::print() {
+	std::cout << this->num_rows << "x" << this->num_columns << std::endl;
 	for (auto row: mat) {
 		for (double value: row) {
 			std::cout << value << " ";

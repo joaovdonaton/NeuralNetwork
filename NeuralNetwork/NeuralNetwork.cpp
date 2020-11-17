@@ -76,10 +76,11 @@ double NeuralNetwork::cost(Matrix X, Matrix y, int K, double lambda) {
 			Y.set_value(i, j, (double)y.get_value(j, 0) == i);
 		}
 	}
-
-
-	//J = J * a.back().matrix_sum(1).matrix_sum(2);
+	Matrix inv_Y = Y.matrix_op(Matrix(K, m, -1), '*');
+	Matrix output_layer = a.back();
 	
+	output_layer.matrix_log('n').matrix_op(inv_Y, '*');
+	Matrix(K, m, 1).matrix_op(Y, '-').matrix_op(Matrix(K, m, 1).matrix_op(output_layer, '-').matrix_log('n'), '*');
 
 	return J;
 }

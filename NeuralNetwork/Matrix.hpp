@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <iostream>
+#include <math.h>
 
 class Matrix {
 	std::vector<std::vector<double>> mat;
@@ -15,6 +16,7 @@ public:
 	void insert_row(std::vector<double> row, int position);
 	void insert_column(std::vector<double> column, int position);
 	void print();
-	Matrix matrix_sum(int axis); // 1 = row, 2 = column
-	Matrix matrix_mult(Matrix mat); //element wise multiplication
+	Matrix matrix_sum(int axis); // 1 = row, 2 = column sum across axis
+	Matrix matrix_op(Matrix mat, char op); // element wise operations
+	Matrix matrix_log(char b); //apply logarithm of base "b" to every element
 }; 
