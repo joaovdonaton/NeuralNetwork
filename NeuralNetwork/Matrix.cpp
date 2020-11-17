@@ -128,7 +128,7 @@ Matrix Matrix::matrix_sum(int axis) {
 	if (axis==1) { 
 		Matrix mat(1, this->num_columns, 1);
 		for (int i = 0; i < this->num_columns; i++) {
-			int accum = 0;
+			double accum = 0;
 			for (int j = 0; j < this->num_rows; j++) {
 				accum += this->mat[j][i];
 			}
@@ -139,7 +139,7 @@ Matrix Matrix::matrix_sum(int axis) {
 	else {
 		Matrix mat(this->num_rows, 1, 1);
 		for (int i = 0; i < this->num_rows; i++) {
-			int accum = 0;
+			double accum = 0;
 			for (int j = 0; j < this->num_columns; j++) {
 				accum += this->mat[i][j];
 			}
