@@ -28,7 +28,7 @@ Matrix load_data(std::string filename, int n_samples) {
 	std::cout << "Loading dataset into matrix(" << n_samples << "x" << columns
 		<< ")..." << std::endl;
 
-	Matrix mat(n_samples, columns);
+	Matrix mat(n_samples, columns, 1);
 
 	std::ifstream file(filename);
 	int current_line = 0;
@@ -50,7 +50,7 @@ Matrix load_labels(std::string filename, int n_labels) {
 
 	std::ifstream file(filename);
 	std::string line;
-	Matrix mat(n_labels, 1);
+	Matrix mat(n_labels, 1, 1);
 	int i = 0;
 	while (std::getline(file, line)) {
 		mat.set_value(i, 0, std::stoi(line));

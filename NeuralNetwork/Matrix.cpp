@@ -1,11 +1,11 @@
 #include "Matrix.hpp"
 
-Matrix::Matrix(int num_rows, int num_columns) {
+Matrix::Matrix(int num_rows, int num_columns, double initial_value) {
 	this->num_rows = num_rows, this->num_columns = num_columns;
 	for (int i = 0; i < num_rows; i++) {
 		std::vector<double> r;
 		for (int j = 0; j < num_columns; j++) {
-			r.push_back(4);
+			r.push_back(initial_value);
 		}
 		mat.push_back(r);
 	}
@@ -15,10 +15,10 @@ Matrix Matrix::matrix_mult(Matrix mat) {
 	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
 		std::cout << "Element wise matrix multiplication failed: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
-		return Matrix(1, 1);
+		return Matrix(1, 1, 1);
 	}
 
-	Matrix new_m(this->num_rows, this->num_columns);
+	Matrix new_m(this->num_rows, this->num_columns, 1);
 	for (int i = 0; i < this->num_rows; i++) {
 		for (int j = 0; j < this->num_columns; j++) {
 			new_m.set_value(i, j, this->get_value(i, j)*mat.get_value(i, j));
@@ -40,10 +40,10 @@ Matrix Matrix::multiply(Matrix mat) {
 	if (num_columns != mat.num_rows) {
 		std::cout << "Matrices can't be multiplied: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
-		return Matrix(1,1);
+		return Matrix(1,1, 1);
 	}
 	
-	Matrix new_m(num_rows, mat.num_columns);
+	Matrix new_m(num_rows, mat.num_columns, 1);
 	for (int i = 0; i < new_m.num_rows; i++) {
 		for (int j = 0; j < new_m.num_columns; j++) {
 			double sum = 0;
@@ -80,7 +80,7 @@ void Matrix::insert_column(std::vector<double> column, int position){
 }
 
 Matrix Matrix::transpose() {
-	Matrix new_m(num_columns, num_rows);
+	Matrix new_m(num_columns, num_rows, 1);
 	for (int i = 0; i < new_m.num_rows; i++) {
 		for (int j = 0; j < new_m.num_columns; j++) {
 			new_m.set_value(i, j, mat[j][i]);
@@ -91,7 +91,7 @@ Matrix Matrix::transpose() {
 
 Matrix Matrix::matrix_sum(int axis) {
 	if (axis==1) { 
-		Matrix mat(1, this->num_columns);
+		Matrix mat(1, this->num_columns, 1);
 		for (int i = 0; i < this->num_columns; i++) {
 			int accum = 0;
 			for (int j = 0; j < this->num_rows; j++) {
@@ -102,7 +102,7 @@ Matrix Matrix::matrix_sum(int axis) {
 		return mat;
 	}
 	else {
-		Matrix mat(this->num_rows, 1);
+		Matrix mat(this->num_rows, 1, 1);
 		for (int i = 0; i < this->num_rows; i++) {
 			int accum = 0;
 			for (int j = 0; j < this->num_columns; j++) {

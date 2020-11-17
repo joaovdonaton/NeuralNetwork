@@ -15,7 +15,7 @@ void NeuralNetwork::initialize_weights() {
 		 if (i + 1 != this->layers.size()-1) //ignore bias node
 			 num_neurons_next-=1; 
 
-		 Matrix weights(num_neurons_next, num_neurons);
+		 Matrix weights(num_neurons_next, num_neurons, 1);
 
 		 for (int j = 0; j < num_neurons_next; j++) {
 			 for (int k = 0; k < num_neurons; k++) {
@@ -24,11 +24,11 @@ void NeuralNetwork::initialize_weights() {
 		 }
 		 this->weights.push_back(weights);
 	}
-	/*//debug 
-	for (int i = 0; i < this->weights.size(); i++) {
+	//debug 
+	/*for (int i = 0; i < this->weights.size(); i++) {
 		std::cout << this->weights[i].num_rows << "x" <<
 			this->weights[i].num_columns << std::endl;
-		//weights[i].print();
+		weights[i].print();
 	}*/
 }
 
@@ -70,7 +70,7 @@ double NeuralNetwork::cost(Matrix X, Matrix y, int K, double lambda) {
 	int m = X.num_rows;
 	double J = 1./m;
 
-	Matrix Y(K, m);
+	Matrix Y(K, m, 1);
 	for (int i = 0; i < K; i++) {
 		for (int j = 0; j < m; j++) { 
 			Y.set_value(i, j, (double)y.get_value(j, 0) == i);
