@@ -11,7 +11,7 @@ Matrix::Matrix(int num_rows, int num_columns, double initial_value) {
 	}
 }
 
-Matrix Matrix::matrix_log(char b) {
+Matrix Matrix::log(char b) {
 	Matrix new_m(this->num_rows, this->num_columns, 1);
 	//temporary fix
 	switch (b) {
@@ -25,7 +25,7 @@ Matrix Matrix::matrix_log(char b) {
 	case 'n': //natural logarithm
 		for (int i = 0; i < this->num_rows; i++) {
 			for (int j = 0; j < this->num_columns; j++) {
-				new_m.set_value(i, j, log(this->get_value(i, j)));
+				new_m.set_value(i, j, std::log(this->get_value(i, j)));
 			}
 		}
 		break;
@@ -35,7 +35,7 @@ Matrix Matrix::matrix_log(char b) {
 	return new_m;
 }
 
-Matrix Matrix::matrix_op(Matrix mat, char op) {
+Matrix Matrix::op(Matrix mat, char op) {
 	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
 		std::cout << "Element wise matrix multiplication failed: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
@@ -124,7 +124,7 @@ Matrix Matrix::transpose() {
 	return new_m;
 }
 
-Matrix Matrix::matrix_sum(int axis) {
+Matrix Matrix::sum(int axis) {
 	if (axis==1) { 
 		Matrix mat(1, this->num_columns, 1);
 		for (int i = 0; i < this->num_columns; i++) {

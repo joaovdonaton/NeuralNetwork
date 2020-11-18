@@ -70,19 +70,19 @@ double NeuralNetwork::cost(Matrix X, Matrix y, int K, double lambda) {
 	int m = X.num_rows;
 	double J = 1./m;
 
-	Matrix Y(K, m, 1);
+	Matrix Y(K, m, 1); // Y = KxM (col = [0 0 0 0 0 0 0 0 1 0])
 	for (int i = 0; i < K; i++) {
 		for (int j = 0; j < m; j++) { 
 			Y.set_value(i, j, (double)y.get_value(j, 0) == i);
 		}
 	}
-	Matrix inv_Y = Y.matrix_op(Matrix(K, m, -1), '*');
+	Matrix inv_Y = Y.op(Matrix(K, m, -1), '*'); // -Y
 	Matrix output_layer = a.back();
 	
-	Matrix y1 = output_layer.matrix_log('n').matrix_op(inv_Y, '*');
-	Matrix y0 = Matrix(K, m, 1).matrix_op(Y, '-').matrix_op(Matrix(K, m, 1).matrix_op(output_layer, '-').matrix_log('n'), '*');
+	Matrix y1 = output_layer.log('n').op(inv_Y, '*'); //A[-1].*-Y
+	Matrix y0 = Matrix(K, m, 1).op(Y, '-').op(Matrix(K, m, 1).op(output_layer, '-').log('n'), '*'); // (1-Y).*ln(1-A[-1])
 
-	J = J * y1.matrix_op(y0, '-').matrix_sum(1).matrix_sum(2).get_value(0,0);
+	J = J * y1.op(y0, '-').sum(1).sum(2).get_value(0,0); // 1/m * sum(sum(Y1-Y0))
 
 	return J;
 }
