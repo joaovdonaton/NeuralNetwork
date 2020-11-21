@@ -17,6 +17,7 @@ public:
 	void insert_column(std::vector<double> column, int position);
 	Matrix get_row(int row);
 	Matrix get_column(int column);
+	void remove_row(int row);
 	void print();
 	Matrix sum(int axis); // 1 = row, 2 = column, sum across axis
 	Matrix op(Matrix mat, char op); // element wise operations

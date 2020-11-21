@@ -28,7 +28,7 @@ void NeuralNetwork::initialize_weights() {
 	/*for (int i = 0; i < this->weights.size(); i++) {
 		std::cout << this->weights[i].num_rows << "x" <<
 			this->weights[i].num_columns << std::endl;
-		weights[i].print();
+		//weights[i].print();
 	}*/
 }
 
@@ -98,12 +98,50 @@ std::vector<Matrix> NeuralNetwork::backpropagation(Matrix X, Matrix y, int K, do
 		}
 	}
 
-	/*for (int i = 0; i < m; i++) {
-		X.
-	}*/
+	std::vector<Matrix> accum_errors;
+	for (int i = 0; i < weights.size(); i++) { //initialize accum_errors
+		accum_errors.push_back(Matrix(weights[i].num_rows, weights[i].num_columns, 0));
+	}
 
-	std::vector<Matrix> x;
-	return x;
+	for (int i = 0; i < m; i++) {
+		std::vector<Matrix> errors; //index 0 = output error, last index = L2 (L1 doesn't have an error)
+
+		std::vector<Matrix> a = feedforward(X.get_row(i));
+		for (int j = a.size()-1; j >= 1; j--) { //compute errors starting from the output layer
+			if (j == a.size() - 1) { //output error
+				errors.push_back(a[j].op(Y.get_column(i), '-'));
+				continue;
+			}
+
+			//error for all other layers
+			Matrix next_error = errors.back();
+			if (j != a.size() - 2) { //remove bias from next error if next error isn't the output layer
+				next_error.remove_row(0);
+			}
+
+			//this->weights[j].print();
+			errors.push_back(this->weights[j].transpose().multiply(next_error).op(a[j]
+				.op(Matrix(a[j].num_rows, a[j].num_columns, 1).op(a[j], '-'), '*'), '*'));
+		}
+		for (int j = accum_errors.size()-1; j >= 0; j--) {
+			if(accum_errors.size() - j - 1 != 0) errors[accum_errors.size() - j - 1].remove_row(0);
+
+			accum_errors[j] = accum_errors[j]
+				.op(errors[accum_errors.size() - j - 1].multiply(a[j].transpose()), '+');
+		}
+	}
+
+	std::vector<Matrix> gradient;
+	for (int i = 0; i < accum_errors.size(); i++) {
+		gradient.push_back(Matrix(accum_errors[i].num_rows, accum_errors[i].num_columns, 1. / m)
+		.op(accum_errors[i], '*'));
+	}
+
+	return gradient;
+}
+
+void train(Matrix X, Matrix y, int K, double lambda, int iter, double alpha) {
+
 }
 
 /*std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();

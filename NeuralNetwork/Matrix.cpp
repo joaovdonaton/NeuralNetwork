@@ -52,6 +52,9 @@ Matrix Matrix::op(Matrix mat, char op) {
 			case '-':
 				new_m.set_value(i, j, this->get_value(i, j) - mat.get_value(i, j));
 				break;
+			case '+':
+				new_m.set_value(i, j, this->get_value(i, j) + mat.get_value(i, j));
+				break;
 			default:
 				std::cout << "Invalid element wise operation" << std::endl;
 				return Matrix(1, 1, 1);
@@ -94,6 +97,11 @@ Matrix Matrix::get_column(int column) {
 		col.set_value(i, 0, this->get_value(i, column));
 	}
 	return col;
+}
+
+void Matrix::remove_row(int row) {
+	mat.erase(mat.begin()+row);
+	this->num_rows--;
 }
 
 Matrix Matrix::multiply(Matrix mat) {
