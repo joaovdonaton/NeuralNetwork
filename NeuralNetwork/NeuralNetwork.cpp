@@ -140,8 +140,15 @@ std::vector<Matrix> NeuralNetwork::backpropagation(Matrix X, Matrix y, int K, do
 	return gradient;
 }
 
-void train(Matrix X, Matrix y, int K, double lambda, int iter, double alpha) {
-
+void NeuralNetwork::train(Matrix X, Matrix y, int K, double lambda, int iter, double alpha) {
+	for (int i = 0; i < iter; i++) {
+		std::vector<Matrix> gradient = backpropagation(X, y, K, lambda);
+		for (int j = 0; j < weights.size(); j++) {
+			weights[j] = weights[j].op(
+				Matrix(weights[j].num_rows, weights[j].num_columns, alpha).op(gradient[j], '*'), '-');
+		}
+		std::cout << cost(X, y, K, 0.) << std::endl;;
+	}
 }
 
 /*std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();

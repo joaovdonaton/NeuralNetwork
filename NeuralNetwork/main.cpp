@@ -17,7 +17,7 @@ int main() {
 		std::cout << a[i] << std::endl;
 	}*/
 
-	Matrix X = load_data("x_train.txt", 5);
+	Matrix X = load_data("x_train.txt", 100);
 	Matrix y = load_labels("y_train.txt", 100); 
 
 	std::vector<double> bias_col;
@@ -27,7 +27,7 @@ int main() {
 	
 	std::cout << NN.cost(X, y, 10, 0.) << std::endl;
 
-	std::vector<Matrix> grads = NN.backpropagation(X, y, 10, 0.);
+	NN.train(X, y, 10, 0., 100, 0.1);
 
 	/*Matrix test(100, 2);
 	test.insert_column(bias_col, 0);
