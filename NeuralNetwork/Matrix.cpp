@@ -45,7 +45,6 @@ Matrix Matrix::op(Matrix mat, char op) {
 	Matrix new_m(this->num_rows, this->num_columns, 1);
 	for (int i = 0; i < this->num_rows; i++) {
 		for (int j = 0; j < this->num_columns; j++) {
-			//temporary fix
 			switch (op) {
 			case '*':
 				new_m.set_value(i, j, this->get_value(i, j) * mat.get_value(i, j));
@@ -69,6 +68,32 @@ void Matrix::set_value(int row, int column, double x) {
 
 double Matrix::get_value(int row, int column) {
 	return mat[row][column];
+}
+
+Matrix Matrix::get_row(int row) {
+	if (row >= this->num_rows) {
+		std::cout << "Row index out of range: " << row << "(Max: " << this->num_rows-1 << ")"<< std::endl;
+		return Matrix(1, 1, 1);
+	}
+
+	Matrix r(1, this->num_columns, 0);
+	for (int i = 0; i < this->num_columns; i++) {
+		r.set_value(0, i, this->get_value(row, i));
+	}
+	return r;
+}
+
+Matrix Matrix::get_column(int column) {
+	if (column >= this->num_columns) {
+		std::cout << "Column index out of range: " << column << "(Max: " << this->num_columns-1 << ")" << std::endl;
+		return Matrix(1, 1, 1);
+	}
+
+	Matrix col(this->num_rows, 1, 0);
+	for (int i = 0; i < this->num_rows; i++) {
+		col.set_value(i, 0, this->get_value(i, column));
+	}
+	return col;
 }
 
 Matrix Matrix::multiply(Matrix mat) {

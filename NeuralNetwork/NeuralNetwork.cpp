@@ -12,7 +12,7 @@ void NeuralNetwork::initialize_weights() {
 		 int num_neurons = this->layers[i].get_neurons().size(); //current layer
 		 int num_neurons_next = this->layers[i + 1].get_neurons().size(); //next layer
 
-		 if (i + 1 != this->layers.size()-1) //ignore bias node
+		 if (i + 1 != this->layers.size()-1) //ignore bias node on layer l+1
 			 num_neurons_next-=1; 
 
 		 Matrix weights(num_neurons_next, num_neurons, 1);
@@ -79,12 +79,31 @@ double NeuralNetwork::cost(Matrix X, Matrix y, int K, double lambda) {
 	Matrix inv_Y = Y.op(Matrix(K, m, -1), '*'); // -Y
 	Matrix output_layer = a.back();
 	
-	Matrix y1 = output_layer.log('n').op(inv_Y, '*'); //A[-1].*-Y
-	Matrix y0 = Matrix(K, m, 1).op(Y, '-').op(Matrix(K, m, 1).op(output_layer, '-').log('n'), '*'); // (1-Y).*ln(1-A[-1])
+	Matrix y1 = output_layer.log('n').op(inv_Y, '*'); // ln(A[-1]).*-Y
+	Matrix y0 = Matrix(K, m, 1).op(Y, '-')
+		.op(Matrix(K, m, 1).op(output_layer, '-').log('n'), '*'); // (1-Y).*ln(1-A[-1])
 
-	J = J * y1.op(y0, '-').sum(1).sum(2).get_value(0,0); // 1/m * sum(sum(Y1-Y0))
+	J = J * y1.op(y0, '-').sum(1).sum(2).get_value(0,0); // 1/m * sum(Y1-Y0)
 
 	return J;
+}
+
+std::vector<Matrix> NeuralNetwork::backpropagation(Matrix X, Matrix y, int K, double lambda) {
+	int m = X.num_rows;
+
+	Matrix Y(K, m, 1); // Y = KxM (col = [0 0 0 0 0 0 0 0 1 0])
+	for (int i = 0; i < K; i++) {
+		for (int j = 0; j < m; j++) {
+			Y.set_value(i, j, (double)y.get_value(j, 0) == i);
+		}
+	}
+
+	/*for (int i = 0; i < m; i++) {
+		X.
+	}*/
+
+	std::vector<Matrix> x;
+	return x;
 }
 
 /*std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
