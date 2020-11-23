@@ -139,16 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Layer.cpp" />
     <ClCompile Include="load_data.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
-    <ClCompile Include="Neuron.cpp" />
-    <ClCompile Include="Neuron.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Layer.hpp" />
     <ClInclude Include="load_data.hpp" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="NeuralNetwork.hpp" />

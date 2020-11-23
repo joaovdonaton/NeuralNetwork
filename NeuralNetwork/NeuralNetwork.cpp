@@ -1,18 +1,17 @@
 #include "NeuralNetwork.hpp"
 
 void NeuralNetwork::append_layer(int num_neurons, bool bias) {
-	this->layers.push_back(Layer(num_neurons+bias));
-	//for(auto l: layers) std::cout << l.get_neurons().size() << std::endl;
+	this->architecture.push_back(num_neurons + bias);
 }
 
 void NeuralNetwork::initialize_weights() {
 	srand((unsigned)time(NULL));
 
-	for (int i = 0; i < this->layers.size()-1; i++) {
-		 int num_neurons = this->layers[i].get_neurons().size(); //current layer
-		 int num_neurons_next = this->layers[i + 1].get_neurons().size(); //next layer
+	for (int i = 0; i < this->architecture.size()-1; i++) {
+		 int num_neurons = this->architecture[i]; //current layer
+		 int num_neurons_next = this->architecture[i + 1]; //next layer
 
-		 if (i + 1 != this->layers.size()-1) //ignore bias node on layer l+1
+		 if (i + 1 != this->architecture.size()-1) //ignore bias node on layer l+1
 			 num_neurons_next-=1; 
 
 		 Matrix weights(num_neurons_next, num_neurons, 1);
@@ -92,7 +91,7 @@ std::vector<Matrix> NeuralNetwork::backpropagation(Matrix X, Matrix y, int K, do
 	int m = X.num_rows;
 
 	Matrix Y(K, m, 1); // Y = KxM (col = [0 0 0 0 0 0 0 0 1 0])
-	for (int i = 0; i < K; i++) {
+	for (int i = 0; i < K; i++) { 
 		for (int j = 0; j < m; j++) {
 			Y.set_value(i, j, (double)y.get_value(j, 0) == i);
 		}
@@ -108,7 +107,7 @@ std::vector<Matrix> NeuralNetwork::backpropagation(Matrix X, Matrix y, int K, do
 
 		std::vector<Matrix> a = feedforward(X.get_row(i));
 		for (int j = a.size()-1; j >= 1; j--) { //compute errors starting from the output layer
-			if (j == a.size() - 1) { //output error
+			if (j == a.size() - 1) { //output error (out_layer-Y)
 				errors.push_back(a[j].op(Y.get_column(i), '-'));
 				continue;
 			}
@@ -119,10 +118,10 @@ std::vector<Matrix> NeuralNetwork::backpropagation(Matrix X, Matrix y, int K, do
 				next_error.remove_row(0);
 			}
 
-			//this->weights[j].print();
 			errors.push_back(this->weights[j].transpose().multiply(next_error).op(a[j]
 				.op(Matrix(a[j].num_rows, a[j].num_columns, 1).op(a[j], '-'), '*'), '*'));
 		}
+		//update accum_errors
 		for (int j = accum_errors.size()-1; j >= 0; j--) {
 			if(accum_errors.size() - j - 1 != 0) errors[accum_errors.size() - j - 1].remove_row(0);
 
@@ -147,7 +146,7 @@ void NeuralNetwork::train(Matrix X, Matrix y, int K, double lambda, int iter, do
 			weights[j] = weights[j].op(
 				Matrix(weights[j].num_rows, weights[j].num_columns, alpha).op(gradient[j], '*'), '-');
 		}
-		std::cout << cost(X, y, K, 0.) << std::endl;;
+		std::cout << "Current Iteration: " << i << "     Cost: "<< cost(X, y, K, 0.) << std::endl;;
 	}
 }
 

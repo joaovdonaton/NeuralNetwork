@@ -6,7 +6,6 @@ int main() {
 	NeuralNetwork NN;
 	NN.append_layer(784, true);
 	NN.append_layer(30, true);
-	NN.append_layer(20, true);
 	NN.append_layer(10, false);
 	
 	NN.initialize_weights();
@@ -17,8 +16,8 @@ int main() {
 		std::cout << a[i] << std::endl;
 	}*/
 
-	Matrix X = load_data("x_train.txt", 100);
-	Matrix y = load_labels("y_train.txt", 100); 
+	Matrix X = load_data("x_train.txt", 10);
+	Matrix y = load_labels("y_train.txt", 10); 
 
 	std::vector<double> bias_col;
 	for (int i = 0; i < X.num_rows; i++) bias_col.push_back(1);
@@ -27,7 +26,25 @@ int main() {
 	
 	std::cout << NN.cost(X, y, 10, 0.) << std::endl;
 
-	NN.train(X, y, 10, 0., 100, 0.1);
+
+	NN.train(X, y, 10, 0., 500, 0.1);
+
+	Matrix out = NN.feedforward(X).back().transpose();
+	double correct = 0.;
+
+	for (int i = 0; i < X.num_rows; i++) {
+		Matrix out_layer = out.get_row(i);
+		int max_ind = out_layer.get_value(0, 0);
+		for (int j = 0; j < 10; j++) {
+			if (out_layer.get_value(0, j) > out_layer.get_value(0, max_ind)) {
+				max_ind = j;
+			}
+		}
+		if (max_ind == y.get_value(i, 0)) correct++;
+		std::cout << "Prediction: " << max_ind << "     Answer:" << y.get_value(i, 0) << std::endl;
+	}
+
+	std::cout << "Accuracy: " << 100 * correct / X.num_rows << std::endl;
 
 	/*Matrix test(100, 2);
 	test.insert_column(bias_col, 0);
