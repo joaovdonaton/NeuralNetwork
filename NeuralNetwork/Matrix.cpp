@@ -35,7 +35,41 @@ Matrix Matrix::log(char b) {
 	return new_m;
 }
 
-Matrix Matrix::op(Matrix mat, char op) {
+Matrix Matrix::operator+(Matrix mat) {
+	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
+		std::cout << "Element wise matrix addition failed: " << num_rows << "x" << num_columns
+			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
+		return Matrix(1, 1, 1);
+	}
+
+	Matrix new_m(this->num_rows, this->num_columns, 1);
+	for (int i = 0; i < this->num_rows; i++) {
+		for (int j = 0; j < this->num_columns; j++) {
+			new_m.set_value(i, j, this->get_value(i, j) + mat.get_value(i, j));
+		}
+	}
+
+	return new_m;
+}
+
+Matrix Matrix::operator-(Matrix mat) {
+	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
+		std::cout << "Element wise matrix subtraction failed: " << num_rows << "x" << num_columns
+			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
+		return Matrix(1, 1, 1);
+	}
+
+	Matrix new_m(this->num_rows, this->num_columns, 1);
+	for (int i = 0; i < this->num_rows; i++) {
+		for (int j = 0; j < this->num_columns; j++) {
+			new_m.set_value(i, j, this->get_value(i, j) - mat.get_value(i, j));
+		}
+	}
+
+	return new_m;
+}
+
+Matrix Matrix::operator*(Matrix mat) {
 	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
 		std::cout << "Element wise matrix multiplication failed: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
@@ -45,20 +79,7 @@ Matrix Matrix::op(Matrix mat, char op) {
 	Matrix new_m(this->num_rows, this->num_columns, 1);
 	for (int i = 0; i < this->num_rows; i++) {
 		for (int j = 0; j < this->num_columns; j++) {
-			switch (op) {
-			case '*':
-				new_m.set_value(i, j, this->get_value(i, j) * mat.get_value(i, j));
-				break;
-			case '-':
-				new_m.set_value(i, j, this->get_value(i, j) - mat.get_value(i, j));
-				break;
-			case '+':
-				new_m.set_value(i, j, this->get_value(i, j) + mat.get_value(i, j));
-				break;
-			default:
-				std::cout << "Invalid element wise operation" << std::endl;
-				return Matrix(1, 1, 1);
-			}
+			new_m.set_value(i, j, this->get_value(i, j) * mat.get_value(i, j));
 		}
 	}
 
@@ -104,7 +125,7 @@ void Matrix::remove_row(int row) {
 	this->num_rows--;
 }
 
-Matrix Matrix::multiply(Matrix mat) {
+Matrix Matrix::operator^(Matrix mat) {
 	if (num_columns != mat.num_rows) {
 		std::cout << "Matrices can't be multiplied: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;

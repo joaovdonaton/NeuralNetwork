@@ -10,7 +10,7 @@ public:
 	int num_rows = 0, num_columns = 0;
 	Matrix(int num_rows, int num_columns, double initial_value);
 	Matrix transpose(); 
-	Matrix multiply(Matrix mat); // matrix multiplication
+	Matrix operator^(Matrix mat); // matrix multiplication
 	void set_value(int row, int column, double x);
 	double get_value(int row, int column);
 	void insert_row(std::vector<double> row, int position);
@@ -20,6 +20,8 @@ public:
 	void remove_row(int row);
 	void print();
 	Matrix sum(int axis); // 1 = row, 2 = column, sum across axis
-	Matrix op(Matrix mat, char op); // element wise operations
+	Matrix operator*(Matrix mat); // element wise multiplication
+	Matrix operator-(Matrix mat); // element wise subtraction
+	Matrix operator+(Matrix mat); // element wise addition
 	Matrix log(char b); //apply logarithm of base "b" to every element
 }; 

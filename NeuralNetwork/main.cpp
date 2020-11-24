@@ -10,23 +10,23 @@ int main() {
 	
 	NN.initialize_weights();
 
+	Matrix pop(3, 4, -5);
+	(pop^Matrix(4, 3, -2)).print();
+
 	/*
 	std::vector<std::string> a = split("7 33 222 2 333 2 1 ");
 	for (int i = 0; i < a.size(); i++) {
 		std::cout << a[i] << std::endl;
 	}*/
 
-	Matrix X = load_data("x_train.txt", 10);
-	Matrix y = load_labels("y_train.txt", 10); 
+	Matrix X = load_data("x_train.txt", 20);
+	Matrix y = load_labels("y_train.txt", 20); 
 
 	std::vector<double> bias_col;
 	for (int i = 0; i < X.num_rows; i++) bias_col.push_back(1);
 
 	X.insert_column(bias_col, 0);
 	
-	std::cout << NN.cost(X, y, 10, 0.) << std::endl;
-
-
 	NN.train(X, y, 10, 0., 500, 0.1);
 
 	Matrix out = NN.feedforward(X).back().transpose();

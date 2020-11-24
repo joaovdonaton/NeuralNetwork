@@ -16,4 +16,5 @@ public:
 	std::vector<Matrix> feedforward(Matrix X);
 	std::vector<Matrix> backpropagation(Matrix X, Matrix y, int K, double lambda);
 	void train(Matrix X, Matrix y, int K, double lambda, int iter, double alpha);
+	//X must already have bias node
 };
