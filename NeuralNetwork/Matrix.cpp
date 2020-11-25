@@ -13,7 +13,6 @@ Matrix::Matrix(int num_rows, int num_columns, double initial_value) {
 
 Matrix Matrix::log(char b) {
 	Matrix new_m(this->num_rows, this->num_columns, 1);
-	//temporary fix
 	switch (b) {
 	case 't': //base 10 logarithm
 		for (int i = 0; i < this->num_rows; i++) {
@@ -152,7 +151,7 @@ void Matrix::insert_row(std::vector<double> row, int position){
 		this->num_rows++;
 	}
 	else {
-		std::cout << "Could not append row" << std::endl;
+		std::cout << "Could not insert row" << std::endl;
 	}
 }
 
@@ -164,7 +163,7 @@ void Matrix::insert_column(std::vector<double> column, int position){
 		this->num_columns++;
 	}
 	else {
-		std::cout << "Could not append column" << std::endl;
+		std::cout << "Could not insert column" << std::endl;
 	}
 }
 
@@ -205,10 +204,10 @@ Matrix Matrix::sum(int axis) {
 
 void Matrix::print() {
 	std::cout << this->num_rows << "x" << this->num_columns << std::endl;
-	/*for (auto row: mat) {
+	for (auto row: mat) {
 		for (double value: row) {
 			std::cout << value << " ";
 		}
 		std::cout << std::endl;
-	}*/
+	}
 }

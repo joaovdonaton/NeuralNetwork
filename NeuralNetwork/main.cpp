@@ -10,12 +10,6 @@ int main() {
 	
 	NN.initialize_weights();
 
-	/*
-	std::vector<std::string> a = split("7 33 222 2 333 2 1 ");
-	for (int i = 0; i < a.size(); i++) {
-		std::cout << a[i] << std::endl;
-	}*/
-
 	double lamb = 5;
 
 	//load training set and train weights
@@ -54,14 +48,6 @@ int main() {
 	std::cout << "Test set accuracy: " << 100 * correct / test_X.num_rows << std::endl;
 	std::cout << "Training set cost: " << NN.cost(X, y, 10, 0.) << std::endl;
 	std::cout << "Test set cost: " << NN.cost(test_X, test_y, 10, 0.) << std::endl;
-
-	/*Matrix test(100, 2);
-	test.insert_column(bias_col, 0);
-	test.print();*/
-
-	//X.print();
-	//std::cout << X.num_rows << " " << X.num_columns << std::endl;
-	//y.print();*/
 
 	return 0;
 }
