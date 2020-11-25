@@ -205,10 +205,10 @@ Matrix Matrix::sum(int axis) {
 
 void Matrix::print() {
 	std::cout << this->num_rows << "x" << this->num_columns << std::endl;
-	for (auto row: mat) {
+	/*for (auto row: mat) {
 		for (double value: row) {
 			std::cout << value << " ";
 		}
 		std::cout << std::endl;
-	}
+	}*/
 }

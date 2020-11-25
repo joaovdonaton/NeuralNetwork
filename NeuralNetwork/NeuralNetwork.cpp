@@ -24,11 +24,11 @@ void NeuralNetwork::initialize_weights() {
 		 this->weights.push_back(weights);
 	}
 	//debug 
-	for (int i = 0; i < this->weights.size(); i++) {
+	/*for (int i = 0; i < this->weights.size(); i++) {
 		std::cout << this->weights[i].num_rows << "x" <<
 			this->weights[i].num_columns << std::endl;
 		//weights[i].print();
-	}
+	}*/
 }
 
 double NeuralNetwork::sigmoid(double z) {
@@ -83,6 +83,18 @@ double NeuralNetwork::cost(Matrix X, Matrix y, int K, double lambda) {
 
 	J = J * (y1-y0).sum(1).sum(2).get_value(0,0); // 1/m * sum(Y1-Y0)
 
+	//regularization (lambda != 0)
+	double reg_sum = 0;
+	for (Matrix w : weights) { 
+		//ignore first column (bias)
+		w = w.transpose();
+		w.remove_row(0);
+		w = w * w;
+		reg_sum += w.sum(1).sum(0).get_value(0, 0);
+	}
+
+	J = J + (lambda / (2 * (double)m)) * reg_sum;
+
 	return J;
 }
 
@@ -132,8 +144,17 @@ std::vector<Matrix> NeuralNetwork::backpropagation(Matrix X, Matrix y, int K, do
 	//compute gradients for weights
 	std::vector<Matrix> gradient;
 	for (int i = 0; i < accum_errors.size(); i++) {
-		gradient.push_back(Matrix(accum_errors[i].num_rows, accum_errors[i].num_columns, 1. / m)
-		*accum_errors[i]);
+		Matrix grad = Matrix(accum_errors[i].num_rows, accum_errors[i].num_columns, 1. / m) * accum_errors[i];
+
+		//regularization
+		for (int j = 0; j < grad.num_rows; j++) { 
+			for (int k = 1; k < grad.num_columns; k++) { //skip bias
+				grad.set_value(j, k, grad.get_value(j, k) + (lambda/m) * 
+					weights[i].get_value(j, k));
+			}
+		}
+
+		gradient.push_back(grad);
 	}
 
 	return gradient;
@@ -147,7 +168,7 @@ void NeuralNetwork::train(Matrix X, Matrix y, int K, double lambda, int iter, do
 			weights[j] = weights[j]-(
 				Matrix(weights[j].num_rows, weights[j].num_columns, alpha)*gradient[j]);
 		}
-		std::cout << "Current Iteration: " << i << "     Cost: "<< cost(X, y, K, 0.) << std::endl;;
+		std::cout << "Current Iteration: " << i << "     Cost: "<< cost(X, y, K, lambda) << std::endl;;
 	}
 }
 

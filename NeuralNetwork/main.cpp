@@ -10,29 +10,36 @@ int main() {
 	
 	NN.initialize_weights();
 
-	Matrix pop(3, 4, -5);
-	(pop^Matrix(4, 3, -2)).print();
-
 	/*
 	std::vector<std::string> a = split("7 33 222 2 333 2 1 ");
 	for (int i = 0; i < a.size(); i++) {
 		std::cout << a[i] << std::endl;
 	}*/
 
-	Matrix X = load_data("x_train.txt", 20);
-	Matrix y = load_labels("y_train.txt", 20); 
+	double lamb = 5;
+
+	//load training set and train weights
+	Matrix X = load_data("x_train.txt", 1000);
+	Matrix y = load_labels("y_train.txt", 1000); 
 
 	std::vector<double> bias_col;
 	for (int i = 0; i < X.num_rows; i++) bias_col.push_back(1);
-
 	X.insert_column(bias_col, 0);
 	
-	NN.train(X, y, 10, 0., 500, 0.1);
+	NN.train(X, y, 10, lamb, 400, 0.1);
 
-	Matrix out = NN.feedforward(X).back().transpose();
+	//load test set and measure accuracy
+	Matrix test_X = load_data("x_test.txt", 2500);
+	Matrix test_y = load_labels("y_test.txt", 2500);
+
+	bias_col.clear();
+	for (int i = 0; i < test_X.num_rows; i++) bias_col.push_back(1);
+	test_X.insert_column(bias_col, 0);
+
+	Matrix out = NN.feedforward(test_X).back().transpose();
 	double correct = 0.;
 
-	for (int i = 0; i < X.num_rows; i++) {
+	for (int i = 0; i < test_X.num_rows; i++) {
 		Matrix out_layer = out.get_row(i);
 		int max_ind = out_layer.get_value(0, 0);
 		for (int j = 0; j < 10; j++) {
@@ -40,11 +47,13 @@ int main() {
 				max_ind = j;
 			}
 		}
-		if (max_ind == y.get_value(i, 0)) correct++;
-		std::cout << "Prediction: " << max_ind << "     Answer:" << y.get_value(i, 0) << std::endl;
+		if (max_ind == test_y.get_value(i, 0)) correct++;
+		//std::cout << "Prediction: " << max_ind << "     Answer:" << test_y.get_value(i, 0) << std::endl;
 	}
 
-	std::cout << "Accuracy: " << 100 * correct / X.num_rows << std::endl;
+	std::cout << "Test set accuracy: " << 100 * correct / test_X.num_rows << std::endl;
+	std::cout << "Training set cost: " << NN.cost(X, y, 10, 0.) << std::endl;
+	std::cout << "Test set cost: " << NN.cost(test_X, test_y, 10, 0.) << std::endl;
 
 	/*Matrix test(100, 2);
 	test.insert_column(bias_col, 0);
