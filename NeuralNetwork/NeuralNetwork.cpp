@@ -27,7 +27,7 @@ void NeuralNetwork::initialize_weights() {
 	/*for (int i = 0; i < this->weights.size(); i++) {
 		std::cout << this->weights[i].num_rows << "x" <<
 			this->weights[i].num_columns << std::endl;
-		//weights[i].print();
+		weights[i].print();
 	}*/
 }
 

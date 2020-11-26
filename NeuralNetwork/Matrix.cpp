@@ -12,18 +12,18 @@ Matrix::Matrix(int num_rows, int num_columns, double initial_value) {
 }
 
 Matrix Matrix::log(char b) {
-	Matrix new_m(this->num_rows, this->num_columns, 1);
+	Matrix new_m(num_rows, num_columns, 1);
 	switch (b) {
 	case 't': //base 10 logarithm
-		for (int i = 0; i < this->num_rows; i++) {
-			for (int j = 0; j < this->num_columns; j++) {
+		for (int i = 0; i < num_rows; i++) {
+			for (int j = 0; j < num_columns; j++) {
 				new_m.set_value(i, j, log10(this->get_value(i, j)));
 			}
 		}
 		break;
 	case 'n': //natural logarithm
-		for (int i = 0; i < this->num_rows; i++) {
-			for (int j = 0; j < this->num_columns; j++) {
+		for (int i = 0; i < num_rows; i++) {
+			for (int j = 0; j < num_columns; j++) {
 				new_m.set_value(i, j, std::log(this->get_value(i, j)));
 			}
 		}
@@ -35,15 +35,15 @@ Matrix Matrix::log(char b) {
 }
 
 Matrix Matrix::operator+(Matrix mat) {
-	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
+	if (num_rows != mat.num_rows || num_columns != mat.num_columns) {
 		std::cout << "Element wise matrix addition failed: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
 		return Matrix(1, 1, 1);
 	}
 
-	Matrix new_m(this->num_rows, this->num_columns, 1);
-	for (int i = 0; i < this->num_rows; i++) {
-		for (int j = 0; j < this->num_columns; j++) {
+	Matrix new_m(num_rows, num_columns, 1);
+	for (int i = 0; i < num_rows; i++) {
+		for (int j = 0; j < num_columns; j++) {
 			new_m.set_value(i, j, this->get_value(i, j) + mat.get_value(i, j));
 		}
 	}
@@ -52,15 +52,15 @@ Matrix Matrix::operator+(Matrix mat) {
 }
 
 Matrix Matrix::operator-(Matrix mat) {
-	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
+	if (num_rows != mat.num_rows || num_columns != mat.num_columns) {
 		std::cout << "Element wise matrix subtraction failed: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
 		return Matrix(1, 1, 1);
 	}
 
-	Matrix new_m(this->num_rows, this->num_columns, 1);
-	for (int i = 0; i < this->num_rows; i++) {
-		for (int j = 0; j < this->num_columns; j++) {
+	Matrix new_m(num_rows, num_columns, 1);
+	for (int i = 0; i < num_rows; i++) {
+		for (int j = 0; j < num_columns; j++) {
 			new_m.set_value(i, j, this->get_value(i, j) - mat.get_value(i, j));
 		}
 	}
@@ -69,15 +69,15 @@ Matrix Matrix::operator-(Matrix mat) {
 }
 
 Matrix Matrix::operator*(Matrix mat) {
-	if (this->num_rows != mat.num_rows || this->num_columns != mat.num_columns) {
+	if (num_rows != mat.num_rows || num_columns != mat.num_columns) {
 		std::cout << "Element wise matrix multiplication failed: " << num_rows << "x" << num_columns
 			<< " " << mat.num_rows << "x" << mat.num_columns << std::endl;
 		return Matrix(1, 1, 1);
 	}
 
-	Matrix new_m(this->num_rows, this->num_columns, 1);
-	for (int i = 0; i < this->num_rows; i++) {
-		for (int j = 0; j < this->num_columns; j++) {
+	Matrix new_m(num_rows, num_columns, 1);
+	for (int i = 0; i < num_rows; i++) {
+		for (int j = 0; j < num_columns; j++) {
 			new_m.set_value(i, j, this->get_value(i, j) * mat.get_value(i, j));
 		}
 	}
@@ -94,26 +94,26 @@ double Matrix::get_value(int row, int column) {
 }
 
 Matrix Matrix::get_row(int row) {
-	if (row >= this->num_rows) {
-		std::cout << "Row index out of range: " << row << "(Max: " << this->num_rows-1 << ")"<< std::endl;
+	if (row >= num_rows) {
+		std::cout << "Row index out of range: " << row << "(Max: " << num_rows-1 << ")"<< std::endl;
 		return Matrix(1, 1, 1);
 	}
 
-	Matrix r(1, this->num_columns, 0);
-	for (int i = 0; i < this->num_columns; i++) {
+	Matrix r(1, num_columns, 0);
+	for (int i = 0; i < num_columns; i++) {
 		r.set_value(0, i, this->get_value(row, i));
 	}
 	return r;
 }
 
 Matrix Matrix::get_column(int column) {
-	if (column >= this->num_columns) {
-		std::cout << "Column index out of range: " << column << "(Max: " << this->num_columns-1 << ")" << std::endl;
+	if (column >= num_columns) {
+		std::cout << "Column index out of range: " << column << "(Max: " << num_columns-1 << ")" << std::endl;
 		return Matrix(1, 1, 1);
 	}
 
-	Matrix col(this->num_rows, 1, 0);
-	for (int i = 0; i < this->num_rows; i++) {
+	Matrix col(num_rows, 1, 0);
+	for (int i = 0; i < num_rows; i++) {
 		col.set_value(i, 0, this->get_value(i, column));
 	}
 	return col;
@@ -121,7 +121,7 @@ Matrix Matrix::get_column(int column) {
 
 void Matrix::remove_row(int row) {
 	mat.erase(mat.begin()+row);
-	this->num_rows--;
+	num_rows--;
 }
 
 Matrix Matrix::operator^(Matrix mat) {
@@ -146,9 +146,9 @@ Matrix Matrix::operator^(Matrix mat) {
 }
 
 void Matrix::insert_row(std::vector<double> row, int position){
-	if (row.size() == this->num_columns && !(position > this->num_rows)) {
-		this->mat.insert(this->mat.begin() + position, row);
-		this->num_rows++;
+	if (row.size() == num_columns && !(position > num_rows)) {
+		mat.insert(mat.begin() + position, row);
+		num_rows++;
 	}
 	else {
 		std::cout << "Could not insert row" << std::endl;
@@ -156,11 +156,11 @@ void Matrix::insert_row(std::vector<double> row, int position){
 }
 
 void Matrix::insert_column(std::vector<double> column, int position){
-	if (column.size() == this->num_rows && !(position > this->num_columns)) {
-		for (int i = 0; i < this->num_rows; i++) {
-			this->mat[i].insert(this->mat[i].begin()+position, column[i]);
+	if (column.size() == num_rows && !(position > num_columns)) {
+		for (int i = 0; i < num_rows; i++) {
+			mat[i].insert(mat[i].begin()+position, column[i]);
 		}
-		this->num_columns++;
+		num_columns++;
 	}
 	else {
 		std::cout << "Could not insert column" << std::endl;
@@ -179,10 +179,10 @@ Matrix Matrix::transpose() {
 
 Matrix Matrix::sum(int axis) {
 	if (axis==1) { 
-		Matrix mat(1, this->num_columns, 1);
-		for (int i = 0; i < this->num_columns; i++) {
+		Matrix mat(1, num_columns, 1);
+		for (int i = 0; i < num_columns; i++) {
 			double accum = 0;
-			for (int j = 0; j < this->num_rows; j++) {
+			for (int j = 0; j < num_rows; j++) {
 				accum += this->mat[j][i];
 			}
 			mat.set_value(0, i, accum);
@@ -190,10 +190,10 @@ Matrix Matrix::sum(int axis) {
 		return mat;
 	}
 	else {
-		Matrix mat(this->num_rows, 1, 1);
-		for (int i = 0; i < this->num_rows; i++) {
+		Matrix mat(num_rows, 1, 1);
+		for (int i = 0; i < num_rows; i++) {
 			double accum = 0;
-			for (int j = 0; j < this->num_columns; j++) {
+			for (int j = 0; j < num_columns; j++) {
 				accum += this->mat[i][j];
 			}
 			mat.set_value(i, 0, accum);
@@ -203,7 +203,7 @@ Matrix Matrix::sum(int axis) {
 }
 
 void Matrix::print() {
-	std::cout << this->num_rows << "x" << this->num_columns << std::endl;
+	std::cout << num_rows << "x" << num_columns << std::endl;
 	for (auto row: mat) {
 		for (double value: row) {
 			std::cout << value << " ";
