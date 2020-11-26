@@ -13,18 +13,18 @@ int main() {
 	double lamb = 5;
 
 	//load training set and train weights
-	Matrix X = load_data("x_train.txt", 1000);
-	Matrix y = load_labels("y_train.txt", 1000); 
+	Matrix X = load_data("./data/MNIST digits/x_train.txt", 50);
+	Matrix y = load_labels("./data/MNIST digits/y_train.txt", 50); 
 
 	std::vector<double> bias_col;
 	for (int i = 0; i < X.num_rows; i++) bias_col.push_back(1);
 	X.insert_column(bias_col, 0);
 	
-	NN.train(X, y, 10, lamb, 400, 0.1);
+	NN.train(X, y, 10, lamb, 100, 0.1);
 
 	//load test set and measure accuracy
-	Matrix test_X = load_data("x_test.txt", 2500);
-	Matrix test_y = load_labels("y_test.txt", 2500);
+	Matrix test_X = load_data("./data/MNIST digits/x_test.txt", 2500);
+	Matrix test_y = load_labels("./data/MNIST digits/y_test.txt", 2500);
 
 	bias_col.clear();
 	for (int i = 0; i < test_X.num_rows; i++) bias_col.push_back(1);
